@@ -1,98 +1,124 @@
-using System.Collections.Generic;
+ using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
+using System.IO;
 
-[RequireComponent(typeof(GameMode))]
 public class GameSaver : MonoBehaviour
 {
-    private GameMode gameMode;
+    private string fileDataScorePath => $"{Application.persistentDataPath}/BestScores.json" ;
+    public int BestScore {get;private set;} = 0;
+    public int CurrentMedalIndex {get;private set;} = -1;
+    private int worstScore = 0;
 
-    private const string LAST_SCORE_KEY = "LSK";
-    private const string BEST_SCORE_KEY = "BSK";
-    private const string SILVER_SCORE_KEY = "SSK";
-    private const string BRONZE_SCORE_KEY = "BBSK";
+    private const int lastScoreIndex = 2;
 
-    public int LastScoreData
+    public bool IsNewScore {get; private set;} = false;
+
+    private void Start() 
     {
-        get { return PlayerPrefs.GetInt(LAST_SCORE_KEY, 0);}
-        private set { PlayerPrefs.SetInt(LAST_SCORE_KEY, value); }
+        if (!File.Exists(fileDataScorePath)) CreateBestScoreFile();
+        LoadScores();
     }
 
-    public int BestScoreData
+    private void CreateBestScoreFile()
     {
-        get { return PlayerPrefs.GetInt(BEST_SCORE_KEY, 0);}
-        private set { PlayerPrefs.SetInt(BEST_SCORE_KEY, value); }
-    }
-
-    public int SilverMedalScore
-    {
-        get { return PlayerPrefs.GetInt(SILVER_SCORE_KEY, 0);}
-        private set { PlayerPrefs.SetInt(SILVER_SCORE_KEY, value); }
-    }
-
-    public int BronzeMedalScore
-    {
-        get { return PlayerPrefs.GetInt(BRONZE_SCORE_KEY, 0);}
-        private set { PlayerPrefs.SetInt(BRONZE_SCORE_KEY, value); }
-    }
-
-    [field:SerializeField] public List<int> topThreeScores = new List<int>();
-
-    public int CurrentMedalIndex {get; private set;}
-
-    private void Awake() 
-    {
-        gameMode = GetComponent<GameMode>();
-        LoadMedalsValue();
-    }
-
-    private void LoadMedalsValue()
-    {
-        topThreeScores.Clear();
-        topThreeScores.Add(BestScoreData);
-        topThreeScores.Add(SilverMedalScore);
-        topThreeScores.Add(BronzeMedalScore);
-    }
-
-    public void SaveGame(int bestScoreData, int lastScore)
-    {
-        CurrentMedalIndex = GetScorePlaceIndex(lastScore);
-        BestScoreData = bestScoreData;
-        LastScoreData = lastScore;
-        SaveNewScoreData(lastScore);
-    }
-
-    public void SaveNewScoreData(int score)
-    {
-        
-        if(CurrentMedalIndex <= 3 && CurrentMedalIndex > -1)
+        List<int> randomMinScoreValues = new List<int>()
         {
-            topThreeScores.Insert(CurrentMedalIndex, score);
-            topThreeScores.RemoveAt(3);
-            topThreeScores.Sort((x, y) => y.CompareTo(x));
-            BestScoreData = topThreeScores[0];
-            SilverMedalScore = topThreeScores[1];
-            BronzeMedalScore = topThreeScores[2];
+            Random.Range(8, 20),
+            Random.Range(8, 20),
+            Random.Range(8, 20)
+        };
+        randomMinScoreValues.Sort((x, y) => y.CompareTo(x));
+
+        using (FileStream file = new FileStream(fileDataScorePath, FileMode.Create, FileAccess.Write))
+        using (StreamWriter writer = new StreamWriter(file))
+        using(JsonWriter jsonWriter = new JsonTextWriter(writer))
+        {
+            JsonSerializer jsonSerializer = new JsonSerializer();
+            jsonSerializer.Serialize(jsonWriter, randomMinScoreValues);
+
         }
-
     }
 
-    private int GetScorePlaceIndex(int score)
+    private void LoadScores()
     {
-        if(score == 0) return -1;
+        var scoreData = GetScoreData();
+        BestScore = scoreData[0];
+        worstScore = scoreData[lastScoreIndex];
+    }
 
-        var placeScore = -1;
-        topThreeScores.Sort((x, y) => y.CompareTo(x));
-        for (int i = 0; i < topThreeScores.Count; i++)
+    public void SaveGame(int bestScore, int lastScore)
+    {
+        if(lastScore == 0) 
         {
-            if (score >= topThreeScores[i])
+            CurrentMedalIndex = -1;
+            return;
+        }
+        IsNewScore = lastScore > worstScore ? true : false;
+        if(!IsNewScore)
+        {
+            CurrentMedalIndex = 3;
+            return;
+        } 
+
+        PlaceNewScore(lastScore);
+        LoadScores();
+    }
+
+    private void PlaceNewScore(int lastScore)
+    {
+        List<int> deserBestScoreData = GetScoreData();
+
+        for (int i = 0; i < deserBestScoreData.Count; i++)
+        {
+            if (lastScore > deserBestScoreData[i])
             {
-                placeScore = i;
+                SaveFileScoreData(lastScore, in deserBestScoreData, i);
                 break;
             }
+        }
+
+    }
+
+    private List<int> GetScoreData()
+    {
+        List<int> deserBestScoreData;
+        using (FileStream file = new FileStream(fileDataScorePath, FileMode.Open, FileAccess.Read))
+        using (StreamReader reader = new StreamReader(file))
+        using (JsonReader jsonReader = new JsonTextReader(reader))
+        {
+            JsonSerializer ser = new JsonSerializer();
+            deserBestScoreData = ser.Deserialize<List<int>>(jsonReader);
+        }
+
+        return deserBestScoreData;
+    }
+
+    private void SaveFileScoreData(int lastScore, in List<int> dataScore, int indexScore)
+    {
+        dataScore.Insert(indexScore, lastScore);
+        dataScore.RemoveAt(lastScoreIndex + 1);
+        CurrentMedalIndex = indexScore;
+        File.Delete(fileDataScorePath);
+        using(FileStream file = new FileStream(fileDataScorePath, FileMode.OpenOrCreate, FileAccess.Write))
+        using(StreamWriter writer = new StreamWriter(file))
+        using(JsonWriter jsonWriter = new JsonTextWriter(writer))
+        {
+            JsonSerializer jsonSerializer = new JsonSerializer();
+            jsonSerializer.Serialize(jsonWriter, dataScore);
 
         }
-        
-        return placeScore >= 0 ? placeScore : 3;
+
+    }
+
+    private void ClearFileScoreData()
+    {
+        if(File.Exists(fileDataScorePath))
+        {
+            File.Delete(fileDataScorePath);
+            CreateBestScoreFile();
+        }
+
     }
 
 }

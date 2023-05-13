@@ -542,6 +542,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3350036806384548251, guid: 7e6cddb3f71def3468ec4ed2ceea89c4, type: 3}
+      propertyPath: saveTest
+      value: 15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e6cddb3f71def3468ec4ed2ceea89c4, type: 3}
 --- !u!1001 &2320654696031573208
@@ -611,6 +615,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3821768716205725025, guid: 3df2009eedb059849b83518b6cf72b2a, type: 3}
+      propertyPath: <playerMovement>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 5a0fbe1e0b77da145a0a859ddadb5aba, type: 2}
     - target: {fileID: 8048648815932756781, guid: 3df2009eedb059849b83518b6cf72b2a, type: 3}
       propertyPath: gameMode
       value: 

@@ -27,7 +27,7 @@ public class GameMode : MonoBehaviour
 
     public bool IsGameStarted { get; private set; } = false;
     public bool IsGameOver { get; private set; } = false;
-    public bool IsNewScore {get; private set;}
+    public bool IsBestScore {get; private set;}
     
     void Start()
     {
@@ -68,8 +68,8 @@ public class GameMode : MonoBehaviour
 
     public void OnGameOver()
     {
-        IsNewScore = CurrentScore > gameSaver.BestScoreData;
-        var bestScore = IsNewScore ? CurrentScore : gameSaver.BestScoreData;  
+        IsBestScore = CurrentScore > gameSaver.BestScore;
+        var bestScore = IsBestScore ? CurrentScore : gameSaver.BestScore;  
         gameSaver.SaveGame(bestScore, CurrentScore);
         playerController.playerMovement = PlayerFrozenMovement;
 

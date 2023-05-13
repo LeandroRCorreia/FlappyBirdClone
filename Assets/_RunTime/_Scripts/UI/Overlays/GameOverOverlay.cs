@@ -47,7 +47,7 @@ public class GameOverOverlay : MonoBehaviour
     {
         windowGameOver.transform.position = startPosition.position;
         lastScoreTxt.text = "0";
-        bestScoreTxt.text = gameSaver.BestScoreData.ToString();
+        bestScoreTxt.text = gameSaver.BestScore.ToString();
         Color colorTransparent = new Color(1, 1, 1, 0);
         retryButtonImage.color = colorTransparent;
         quitButtonImage.color = colorTransparent;
@@ -86,7 +86,7 @@ public class GameOverOverlay : MonoBehaviour
             
             yield return null;
         }
-        newBestScoreImage.gameObject.SetActive(gameMode.IsNewScore);
+        newBestScoreImage.gameObject.SetActive(gameMode.IsBestScore);
 
     }
 
