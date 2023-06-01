@@ -8,8 +8,11 @@ public class EndlessPipeGenerator : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private GameMode gameMode;
 
-    private List<GameObject> currentPipeInScene = new List<GameObject>();
-    private List<GameObject> currentGroundInScene = new List<GameObject>();
+    private List<PipePair> currentPipeInScene = new List<PipePair>(10);
+    private List<Ground> currentGroundInScene = new List<Ground>(10);
+    [SerializeField] private Pool<PipePair> pipeObjPool;
+    [SerializeField] private Pool<Ground> groundObjPool;
+
 
     [Header("Ground Parameter")]
 
@@ -31,9 +34,15 @@ public class EndlessPipeGenerator : MonoBehaviour
     [Range(2, 5)]
     [SerializeField] private int maxPipesBehindOfPlayer = 2;
     [SerializeField] private float xDistanceBetweenPipes = 10;
-    private float currentPipePosition = 7f;
+    private float currentPipePositionX = 7f;
     private const float yMaxTop = 2.5f;
     private const float yMaxBottom = -2.5f;
+
+    private void Start() 
+    {
+        pipeObjPool.InitializePool();
+        groundObjPool.InitializePool();
+    }
 
     private void Update() 
     {
@@ -50,7 +59,7 @@ public class EndlessPipeGenerator : MonoBehaviour
     {
         CheckIfNeedAddGround();
         CheckDestroyGround();
-        currentPipePosition = playerController.transform.position.x + xDistanceBetweenPipes;
+        currentPipePositionX = playerController.transform.position.x + xDistanceBetweenPipes;
     }
 
     private void UpdateEndlessPipeGenerator()
@@ -63,28 +72,33 @@ public class EndlessPipeGenerator : MonoBehaviour
 
     private void SpawnPipe()
     {
-        var pipe = Instantiate(pipeBasePrefab, transform);
-        pipe.position = new Vector3(currentPipePosition, Random.Range(yMaxBottom, yMaxTop));
-        currentPipePosition += xDistanceBetweenPipes;
-        currentPipeInScene.Add(pipe.gameObject);
+        Vector3 positionPipe = Vector3.zero;
+        positionPipe.x = currentPipePositionX;
+        positionPipe.y = Random.Range(yMaxBottom, yMaxTop);
+
+        currentPipePositionX += xDistanceBetweenPipes;
+
+        PipePair pipeObj = pipeObjPool.GetFromPool(positionPipe);
+        currentPipeInScene.Add(pipeObj);
     }
 
     private void SpawnGround()
     {
-        var groundInstance = Instantiate(groundPrefab, transform);
-        groundInstance.position = new Vector3(xCurrentGroundPosition, -6);
+        Vector3 positionGround = new Vector3(xCurrentGroundPosition, -6);
+        Ground groundObj = groundObjPool.GetFromPool(positionGround);
         xCurrentGroundPosition += xDistanceBetweenGround;
-        currentGroundInScene.Add(groundInstance.gameObject);
+
+        currentGroundInScene.Add(groundObj);
     }
 
     private void CheckDestroyPipe()
     {
         for (int i = currentPipeInScene.Count; i > 0; i--)
         {
-            var pipe = currentPipeInScene[i - 1].transform;
-            if (pipe.position.x < playerController.transform.position.x - (xDistanceBetweenPipes * maxPipesBehindOfPlayer))
+            PipePair pipe = currentPipeInScene[i - 1];
+            if (pipe.transform.position.x < playerController.transform.position.x - (xDistanceBetweenPipes * maxPipesBehindOfPlayer))
             {
-                Destroy(pipe.gameObject);
+                pipeObjPool.ReturnToPool(pipe);
                 currentPipeInScene.RemoveAt(i - 1);
             }
         }
@@ -94,10 +108,10 @@ public class EndlessPipeGenerator : MonoBehaviour
     {
         for (int i = currentGroundInScene.Count; i > 0; i--)
         {
-            var ground = currentGroundInScene[i - 1].transform;
-            if (ground.position.x < playerController.transform.position.x - (xDistanceBetweenPipes * maxGroundBehindOfPlayer))
+            Ground ground = currentGroundInScene[i - 1];
+            if (ground.transform.position.x < playerController.transform.position.x - (xDistanceBetweenPipes * maxGroundBehindOfPlayer))
             {
-                Destroy(ground.gameObject);
+                groundObjPool.ReturnToPool(ground);
                 currentGroundInScene.RemoveAt(i - 1);
             }
         }
@@ -119,7 +133,7 @@ public class EndlessPipeGenerator : MonoBehaviour
 
     private void CheckIfNeedAddPipes()
     {
-        if ((xDistanceBetweenPipes * maxPipesInFrontOfPlayer) + playerController.transform.position.x > currentPipePosition)
+        if ((xDistanceBetweenPipes * maxPipesInFrontOfPlayer) + playerController.transform.position.x > currentPipePositionX)
         {
             SpawnPipe();
         }

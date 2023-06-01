@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f51479ced5d02c46891fb4a7eaa8285, type: 3}
   m_Name: PlayerRunTIme
   m_EditorClassIdentifier: 
-  <velocityY>k__BackingField: 10
+  <velocityY>k__BackingField: 8.75
   <xVelocity>k__BackingField: 3

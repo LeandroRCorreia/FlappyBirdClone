@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 8106688631812096602}
   - component: {fileID: 2302326503961767154}
   - component: {fileID: 8148124623732963956}
+  - component: {fileID: 7737525544950766791}
   m_Layer: 0
   m_Name: Pipe_Base
   m_TagString: Obstacle
@@ -256,6 +257,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.4384977, y: 8.325219}
   m_EdgeRadius: 0
+--- !u!114 &7737525544950766791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7015589111994689593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0588f47a8b02ac04f9ab456fb406f7a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2339130698299765384
 PrefabInstance:
   m_ObjectHideFlags: 0

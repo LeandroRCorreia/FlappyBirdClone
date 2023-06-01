@@ -310,7 +310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 2320654696347759324}
-  <playerMovement>k__BackingField: {fileID: 0}
+  <playerMovement>k__BackingField: {fileID: 11400000, guid: 5a0fbe1e0b77da145a0a859ddadb5aba, type: 2}
   maxVelocityY: 10
   flappTime: 0.175
   flappSound: {fileID: 8300000, guid: 08465816ef890cc4fa58f27367bd4987, type: 3}
@@ -327,7 +327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameMode: {fileID: 0}
-  mainHUD: {fileID: 0}
+  screenController: {fileID: 0}
   pipeHitSound: {fileID: 8300000, guid: 591ce1d93be285e4f9e1eedd22fb9826, type: 3}
 --- !u!114 &4285941170822855220
 MonoBehaviour:

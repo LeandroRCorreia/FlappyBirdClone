@@ -145,6 +145,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ffdcf3aa7e3b6c49a063271a37775cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &455867685
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 455867686}
+  m_Layer: 0
+  m_Name: GroundPoolRot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &455867686
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 455867685}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2066915145}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,6 +474,14 @@ MonoBehaviour:
   groundPrefab: {fileID: 3842355716920799552, guid: cacbfa763a3f3cc40bfb0cf7914dae7f, type: 3}
   playerController: {fileID: 1027449763}
   gameMode: {fileID: 422276779}
+  pipeObjPool:
+    poolRoot: {fileID: 1804556284}
+    prefab: {fileID: 7737525544950766791, guid: 265830840bd7b3542922ed70eb014632, type: 3}
+    initialPoolSize: 5
+  groundObjPool:
+    poolRoot: {fileID: 455867686}
+    prefab: {fileID: 4275523317644694373, guid: cacbfa763a3f3cc40bfb0cf7914dae7f, type: 3}
+    initialPoolSize: 5
   maxGroundFrontOfPlayer: 2
   maxGroundBehindOfPlayer: 2
   maxPipesInFrontOfPlayer: 3
@@ -459,9 +498,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2066915145}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1760421596 stripped
 Transform:
@@ -479,6 +519,70 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26bc19df70ac0944bae5e0a9a7dfdbb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1804556283
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1804556284}
+  m_Layer: 0
+  m_Name: PipePoolRot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1804556284
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804556283}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2066915145}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2066915144
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2066915145}
+  m_Layer: 0
+  m_Name: ObjPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2066915145
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2066915144}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1804556284}
+  - {fileID: 455867686}
+  m_Father: {fileID: 1590421885}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1890617553986708297
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -500,7 +604,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1890617553564569061, guid: 7e6cddb3f71def3468ec4ed2ceea89c4, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1890617553564569061, guid: 7e6cddb3f71def3468ec4ed2ceea89c4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -567,9 +671,21 @@ PrefabInstance:
       propertyPath: screenController
       value: 
       objectReference: {fileID: 1760421599}
+    - target: {fileID: 1378973241, guid: 3df2009eedb059849b83518b6cf72b2a, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2320654696347759322, guid: 3df2009eedb059849b83518b6cf72b2a, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320654696347759324, guid: 3df2009eedb059849b83518b6cf72b2a, type: 3}
+      propertyPath: m_BodyType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320654696347759324, guid: 3df2009eedb059849b83518b6cf72b2a, type: 3}
+      propertyPath: m_Constraints
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2320654696347759325, guid: 3df2009eedb059849b83518b6cf72b2a, type: 3}
       propertyPath: m_RootOrder
